@@ -15,7 +15,7 @@ This repository demonstrates how to create a WebSocket server in C++ that can ha
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/multi-client-websocket.git
+git clone https://github.com/kamalesh-p/multi-client-websocket.git
 cd multi-client-websocket
 ```
 
