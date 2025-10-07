@@ -1,7 +1,7 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 #include <iostream>
-#include <unordered_map>
+#include <map>
 #include <mutex>
 
 typedef websocketpp::server<websocketpp::config::asio> websocket_server;
@@ -86,12 +86,13 @@ public:
         server.set_reuse_addr(true);
         server.listen(port);
         server.start_accept();
+        std::cout << "Websocket server started on port = " << port << std::endl;
         server.run();
     }
 
 private:
     websocket_server server;
-    std::unordered_map<connection_hdl, Client*, std::owner_less<connection_hdl>> clients;
+    std::map<connection_hdl, Client*, std::owner_less<connection_hdl>> clients;
     std::mutex clients_mutex;
     int next_id = 1;
 };
