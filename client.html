@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebSocket Client</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #f2f2f2;
+  }
+  #messages {
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+    background: #fff;
+    margin-bottom: 10px;
+  }
+  #input-area {
+    display: flex;
+  }
+  #message-input {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+  }
+  #send-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h2>WebSocket Client</h2>
+<div id="messages"></div>
+
+<div id="input-area">
+  <input type="text" id="message-input" placeholder="Type your message...">
+  <button id="send-btn">Send</button>
+</div>
+
+<script>
+  const ws = new WebSocket('ws://localhost:9002'); // change port if needed
+  const messagesDiv = document.getElementById('messages');
+  const input = document.getElementById('message-input');
+  const sendBtn = document.getElementById('send-btn');
+
+  ws.onopen = () => {
+    addMessage('Connected to server');
+  };
+
+  ws.onmessage = (event) => {
+    addMessage('Server: ' + event.data);
+  };
+
+  ws.onclose = () => {
+    addMessage('Disconnected from server');
+  };
+
+  ws.onerror = (err) => {
+    addMessage('Error: ' + err.message);
+  };
+
+  sendBtn.onclick = () => {
+    const msg = input.value.trim();
+    if(msg) {
+      ws.send(msg);
+      addMessage('You: ' + msg);
+      input.value = '';
+    }
+  };
+
+  function addMessage(msg) {
+    const p = document.createElement('p');
+    p.textContent = msg;
+    messagesDiv.appendChild(p);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  // Optional: send message on Enter key
+  input.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') sendBtn.click();
+  });
+</script>
+
+</body>
+</html>
